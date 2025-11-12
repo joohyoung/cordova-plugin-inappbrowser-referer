@@ -948,9 +948,9 @@ public class InAppBrowser extends CordovaPlugin {
                 settings.setJavaScriptCanOpenWindowsAutomatically(true);
                 settings.setBuiltInZoomControls(showZoomControls);
                 settings.setPluginState(android.webkit.WebSettings.PluginState.ON);
-                
+
                 // download event
-                
+
                 inAppWebView.setDownloadListener(
                     new DownloadListener(){
                         public void onDownloadStart(
@@ -971,7 +971,7 @@ public class InAppBrowser extends CordovaPlugin {
                             }
                         }
                     }
-                );        
+                );
 
                 // Add postMessage interface
                 class JsObject {
@@ -1020,7 +1020,15 @@ public class InAppBrowser extends CordovaPlugin {
                 // Enable Thirdparty Cookies
                 CookieManager.getInstance().setAcceptThirdPartyCookies(inAppWebView,true);
 
-                inAppWebView.loadUrl(url);
+                // Add Referer header for YouTube playback (prevents "Error 153")
+                String packageName = cordova.getActivity().getPackageName();
+                String referer = "https://" + packageName;
+
+                HashMap<String, String> headers = new HashMap<>();
+                headers.put("Referer", referer);
+                // headers.put("Referrer-Policy", "strict-origin-when-cross-origin");
+                inAppWebView.loadUrl(url, headers);
+
                 inAppWebView.setId(Integer.valueOf(6));
                 inAppWebView.getSettings().setLoadWithOverviewMode(true);
                 inAppWebView.getSettings().setUseWideViewPort(useWideViewPort);
