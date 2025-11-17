@@ -854,7 +854,12 @@ BOOL isExiting = FALSE;
         [self.toolbar setItems:@[self.closeButton, flexibleSpaceButton, self.backButton, fixedSpaceButton, self.forwardButton]];
     }
 
-    self.view.backgroundColor = [UIColor clearColor];
+    // Set view background to match toolbar color to prevent transparency issues
+    if (_browserOptions.toolbarcolor != nil) {
+        self.view.backgroundColor = [self colorFromHexString:_browserOptions.toolbarcolor];
+    } else {
+        self.view.backgroundColor = [UIColor whiteColor];
+    }
     [self.view addSubview:self.toolbar];
     [self.view addSubview:self.addressLabel];
     [self.view addSubview:self.spinner];
