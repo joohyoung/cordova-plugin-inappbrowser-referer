@@ -854,11 +854,17 @@ BOOL isExiting = FALSE;
         [self.toolbar setItems:@[self.closeButton, flexibleSpaceButton, self.backButton, fixedSpaceButton, self.forwardButton]];
     }
 
-    // Set view background to match toolbar color to prevent transparency issues
-    if (_browserOptions.toolbarcolor != nil) {
-        self.view.backgroundColor = [self colorFromHexString:_browserOptions.toolbarcolor];
+    // Set view background based on toolbar translucency
+    if (!_browserOptions.toolbartranslucent) {
+        // For opaque toolbar, use solid background color
+        if (_browserOptions.toolbarcolor != nil) {
+            self.view.backgroundColor = [self colorFromHexString:_browserOptions.toolbarcolor];
+        } else {
+            self.view.backgroundColor = [UIColor whiteColor];
+        }
     } else {
-        self.view.backgroundColor = [UIColor whiteColor];
+        // For translucent toolbar, keep background clear to show translucent effect
+        self.view.backgroundColor = [UIColor clearColor];
     }
     [self.view addSubview:self.toolbar];
     [self.view addSubview:self.addressLabel];
