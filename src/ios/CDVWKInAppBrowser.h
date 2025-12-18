@@ -68,6 +68,7 @@
 @property (nonatomic, weak) id <CDVScreenOrientationDelegate> orientationDelegate;
 @property (nonatomic, weak) CDVWKInAppBrowser* navigationDelegate;
 @property (nonatomic) NSURL* currentURL;
+@property (nonatomic, strong) CDVInAppBrowserOptions* browserOptions;
 
 - (void)close;
 - (void)navigateTo:(NSURL*)url;
