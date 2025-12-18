@@ -158,6 +158,9 @@ static CDVWKInAppBrowser* instance = nil;
         if ([self.viewController conformsToProtocol:@protocol(CDVScreenOrientationDelegate)]) {
             self.inAppBrowserViewController.orientationDelegate = (UIViewController <CDVScreenOrientationDelegate>*)self.viewController;
         }
+    } else {
+        // Update browserOptions when reusing existing view controller
+        self.inAppBrowserViewController.browserOptions = browserOptions;
     }
 
     [self.inAppBrowserViewController showLocationBar:browserOptions.location];
@@ -637,6 +640,7 @@ static CDVWKInAppBrowser* instance = nil;
 @implementation CDVWKInAppBrowserViewController
 
 @synthesize currentURL;
+@synthesize browserOptions = _browserOptions;
 
 CGFloat lastReducedStatusBarHeight = 0.0;
 BOOL isExiting = FALSE;
@@ -1066,14 +1070,18 @@ BOOL isExiting = FALSE;
     if ([url.scheme isEqualToString:@"file"]) {
         [self.webView loadFileURL:url allowingReadAccessToURL:url];
     } else {
-        NSString *bundleId = [[NSBundle mainBundle] bundleIdentifier];
-        NSString *referrer = [[NSString stringWithFormat:@"https://%@", bundleId] lowercaseString];
-        NSURL *referrerUrl = [NSURL URLWithString:referrer];
-
-        NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:url];
-        [request addValue:[referrerUrl absoluteString] forHTTPHeaderField:@"Referer"];
-
-        [self.webView loadRequest:request];
+        if (_browserOptions.referrer != nil && ![_browserOptions.referrer isEqualToString:@""]) {
+            // Add Referer header if specified via options
+            NSURL *referrerUrl = [NSURL URLWithString:_browserOptions.referrer];
+            NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:url];
+            [request addValue:[referrerUrl absoluteString] forHTTPHeaderField:@"Referer"];
+            // [request addValue:@"strict-origin-when-cross-origin" forHTTPHeaderField:@"Referrer-Policy"];
+            [self.webView loadRequest:request];
+        } else {
+            // No Referer header
+            NSURLRequest *request = [NSURLRequest requestWithURL:url];
+            [self.webView loadRequest:request];
+        }
     }
 }
 

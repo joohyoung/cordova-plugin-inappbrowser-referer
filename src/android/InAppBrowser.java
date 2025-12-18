@@ -118,10 +118,11 @@ public class InAppBrowser extends CordovaPlugin {
     private static final String FOOTER_COLOR = "footercolor";
     private static final String BEFORELOAD = "beforeload";
     private static final String FULLSCREEN = "fullscreen";
+    private static final String REFERRER = "referrer";
 
     private static final int TOOLBAR_HEIGHT = 48;
 
-    private static final List customizableOptions = Arrays.asList(CLOSE_BUTTON_CAPTION, TOOLBAR_COLOR, NAVIGATION_COLOR, CLOSE_BUTTON_COLOR, FOOTER_COLOR);
+    private static final List customizableOptions = Arrays.asList(CLOSE_BUTTON_CAPTION, TOOLBAR_COLOR, NAVIGATION_COLOR, CLOSE_BUTTON_COLOR, FOOTER_COLOR, REFERRER);
 
     private InAppBrowserDialog dialog;
     private WebView inAppWebView;
@@ -147,6 +148,7 @@ public class InAppBrowser extends CordovaPlugin {
     private boolean hideUrlBar = false;
     private boolean showFooter = false;
     private String footerColor = "";
+    private String customReferrer = null;
     private String beforeload = "";
     private boolean fullscreen = true;
     private String[] allowedSchemes;
@@ -634,6 +636,7 @@ public class InAppBrowser extends CordovaPlugin {
         showZoomControls = true;
         openWindowHidden = false;
         mediaPlaybackRequiresUserGesture = false;
+        customReferrer = null;
 
         if (features != null) {
             String show = features.get(LOCATION);
@@ -714,6 +717,10 @@ public class InAppBrowser extends CordovaPlugin {
             String fullscreenSet = features.get(FULLSCREEN);
             if (fullscreenSet != null) {
                 fullscreen = fullscreenSet.equals("yes") ? true : false;
+            }
+            String referrer = features.get(REFERRER);
+            if (referrer != null && !referrer.isEmpty()) {
+                customReferrer = referrer;
             }
         }
 
@@ -1020,14 +1027,16 @@ public class InAppBrowser extends CordovaPlugin {
                 // Enable Thirdparty Cookies
                 CookieManager.getInstance().setAcceptThirdPartyCookies(inAppWebView,true);
 
-                // Add Referer header for YouTube playback (prevents "Error 153")
-                String packageName = cordova.getActivity().getPackageName();
-                String referer = "https://" + packageName;
-
-                HashMap<String, String> headers = new HashMap<>();
-                headers.put("Referer", referer);
-                // headers.put("Referrer-Policy", "strict-origin-when-cross-origin");
-                inAppWebView.loadUrl(url, headers);
+                // Add Referer header if specified via options
+                if (customReferrer != null && !customReferrer.isEmpty()) {
+                    HashMap<String, String> headers = new HashMap<>();
+                    headers.put("Referer", customReferrer);
+                    // headers.put("Referrer-Policy", "strict-origin-when-cross-origin");
+                    inAppWebView.loadUrl(url, headers);
+                } else {
+                    // No Referer header
+                    inAppWebView.loadUrl(url);
+                }
 
                 inAppWebView.setId(Integer.valueOf(6));
                 inAppWebView.getSettings().setLoadWithOverviewMode(true);
