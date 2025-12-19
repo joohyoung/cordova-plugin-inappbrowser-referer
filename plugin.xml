@@ -23,11 +23,11 @@
       version="6.0.1-dev">
 
     <name>InAppBrowser</name>
-    <description>Cordova InAppBrowser Plugin</description>
+    <description>Cordova InAppBrowser Plugin Referer</description>
     <license>Apache 2.0</license>
     <keywords>cordova,in,app,browser,inappbrowser</keywords>
-    <repo>https://github.com/apache/cordova-plugin-inappbrowser</repo>
-    <issue>https://github.com/apache/cordova-plugin-inappbrowser/issues</issue>
+    <repo>https://github.com/joohyoung/cordova-plugin-inappbrowser-referer</repo>
+    <issue>https://github.com/joohyoung/cordova-plugin-inappbrowser-referer/issues</issue>
 
     <engines>
         <engine name="cordova" version=">=9.0.0"/>

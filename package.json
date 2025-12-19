@@ -11,8 +11,8 @@
       "ios"
     ]
   },
-  "repository": "github:apache/cordova-plugin-inappbrowser",
-  "bugs": "https://github.com/apache/cordova-plugin-inappbrowser/issues",
+  "repository": "github:joohyoung/cordova-plugin-inappbrowser-referer",
+  "bugs": "https://github.com/joohyoung/cordova-plugin-inappbrowser-referer/issues",
   "keywords": [
     "cordova",
     "in",
@@ -52,7 +52,7 @@
       }
     }
   },
-  "author": "Apache Software Foundation",
+  "author": "박주형 <akalpa@naver.com>",
   "license": "Apache-2.0",
   "devDependencies": {
     "@cordova/eslint-config": "^5.0.0"
