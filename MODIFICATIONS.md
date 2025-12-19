@@ -60,41 +60,6 @@ InAppBrowser를 통해 이루어지는 모든 요청에 HTTP Referer 헤더를 �
 
 ---
 
-## 📦 보류 중인 수정사항 (브랜치: reserved/ios-safe-area-fix)
-
-### 3. iOS Safe Area 지원
-**커밋**: `f6cedc0`, `a03651b`
-**날짜**: 2025년 11월 17일
-**플랫폼**: iOS
-**상태**: ⚠️ 아직 master에 병합되지 않음
-
-#### 요약
-노치/Dynamic Island가 있는 iPhone X 이상 기기를 위한 완전한 Safe Area Insets 지원.
-
-#### 문제점
-- 노치가 있는 iPhone에서 InAppBrowser 하단에 빈 공간 발생
-- 34pt 빈 공간 (Home Indicator 영역)을 통해 하위 앱 콘텐츠가 비쳐 보임
-- Safe Area를 무시하고 툴바가 잘못 배치됨
-
-#### 해결방법
-- Safe Area Insets를 고려한 툴바 위치 조정
-- `createViews`, `showToolBar`, `showLocationBar`, `rePositionViews` 메서드 수정
-- 기기 회전 시 자동 재배치를 위한 `viewSafeAreaInsetsDidChange` 추가
-- iOS 11 이하 호환성 유지
-
-#### 변경사항
-- `src/ios/CDVWKInAppBrowser.m` 수정 (159줄 추가, 20줄 삭제)
-- 포괄적인 문서 생성:
-  - `docs/ios-safe-area-fix.md` (480줄)
-  - `docs/ios-safe-area-reposition-fix.md` (433줄)
-
-#### 접근 방법
-```bash
-git checkout reserved/ios-safe-area-fix
-```
-
----
-
 ## 🎯 사용 사례
 
 이러한 수정사항은 다음 용도로 설계되었습니다:
@@ -154,7 +119,7 @@ upstream Apache Cordova InAppBrowser와 동기화할 때:
 
 ## 👤 작성자
 
-**박지환 (jhpark)**
+**박주형 (jhpark)**
 이메일: akalpa@naver.com
 날짜: 2025년 11월
 
